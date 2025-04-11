@@ -676,4 +676,4 @@ function Logger(constructor: Function) {
   // Al compilar, se imprime:
   // Clase registrada: Usuario
   // Usuario creado
-  
+
