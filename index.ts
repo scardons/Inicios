@@ -313,3 +313,59 @@ console.log(tienePermiso('admin', 'eliminar')); // ✅ true
 console.log(tienePermiso('editor', 'eliminar')); // ❌ false
 console.log(tienePermiso('lector', 'leer'));     // ✅ true
 console.log(tienePermiso('lector', 'crear'));    // ❌ false
+
+// parametros opcionales usando (?)
+
+
+//Funciones como tipos: funciones que reciben o retornan funciones.
+// como cunado una funcion retorna otra funcion, es muy util para programacion funcional, callback, middleware, validaciones y mas
+//funcion como tipo (tipo de una funcion)
+type operacion = (a: number, b: number) => number
+
+const sumarr: operacion = (a,b) => a + b
+const restarr: operacion = (a,b) => a - b 
+
+//funciones que reciben otras funciones
+// muy comunes en los callback
+function calcular (a:number, b:number, operacion:(x:number, y:number) => number):number {
+    return operacion(a,b)
+}
+console.log(calcular(5,3, sumarr))
+console.log(calcular(5,3, restarr))
+//funciones que retornan otras funciones 
+//se usan en clousure, factories, middlewares
+function crearMultiplicador(factor: number): (x:number) => number {
+    return function(x: number): number {
+        return x* factor
+    }
+}
+const por2 = crearMultiplicador(2)
+const por5 = crearMultiplicador(3)
+
+console.log(por2(10))
+console.log(por5(10))
+
+//Tipos genéricos (<T>) y funciones genéricas.
+//Es uno de los pilares mas poderosos de typescript: los tipos genericos(<T>) me permite escribir funciones, clases o interfaces reutilizables que funcionan con cualquier tipo, para mantener un tipado fuierte 
+// un tipo generico es una plantilla de tipo, en vez de es de usar el tipo exacto como string o number escribes una letra generica como (<T>)
+
+// funcion generica basica 
+function devolverLoMismo<T>(valor: T): T {
+    return valor
+}
+const texto = devolverLoMismo("hola")
+const numero = devolverLoMismo(342)
+const esValido = devolverLoMismo(true)
+//🔍 Aquí, T puede ser cualquier tipo, y TypeScript infiera el tipo automáticamente.
+
+//Intersection types (type A = B & C).
+// se usa para combinar multiples tipos en uno solo 
+type a ={nombre:string}
+type b ={edad:number}
+
+type Persona = a & b
+
+const personas: Persona = {
+    nombre: "santiago",
+    edad: 23
+}
