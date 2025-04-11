@@ -369,3 +369,311 @@ const personas: Persona = {
     nombre: "santiago",
     edad: 23
 }
+
+// ejemplo realista de intersection types 
+type usuarioo = {id: number; nombre: string}
+type permisos = {rol: "admin"|"users"; activo: boolean}
+
+type usuarioConPermiso = usuarioo & permisos
+
+const admin: usuarioConPermiso = {
+    id: 1,
+    nombre: "leidy",
+    rol: "admin",
+    activo: true
+}
+
+//Type guards: validación con typeof, instanceof.
+
+// son herramientas que permiten validar tipos de tiempo de ejecucion usando condiciones como typeof, instanceof, o incluso funciones personalizadas
+
+//es una verificacion logica en typescript inferir en un tipo mas especifico dentro de un bloque if 
+
+//typeof para tipos primitivos
+function imprimir (valor: string | number){
+    if (typeof valor === "string"){
+        console.log("Es un string", valor.toUpperCase())
+    }else{
+        console.log("es un numero", valor.toFixed(2))
+    }
+}
+
+//👉 typeof solo funciona con: "string", "number", "boolean", "undefined", "symbol", "bigint", "function", "object"
+
+//🔸 2. instanceof — Para clases
+
+class perro{
+    ladrar(){
+        console.log("guau")
+    }
+}
+class gato{
+    maullar(){
+        console.log("miau")
+    }
+}
+function hacerSonido(animal:perro | gato){
+    if(animal instanceof perro){
+        animal.ladrar
+    }else{
+        animal.maullar
+    }
+}
+
+//🧠 Aquí instanceof verifica si el objeto fue creado por una clase específica.
+
+// una clase es una plantilla para crear objetos con propiedades y metodos
+
+// ejemplo de clase y constructor
+
+class personass {
+    nombre: string
+    edad:number
+    //el constructor inicializa las propiedad
+    constructor (nombre: string, edad:number){
+        this.nombre = nombre
+        this.edad = edad
+    }
+
+    saludar():void{
+        console.log(`Hola, soy${this.nombre} y tengo ${this.edad} años`);
+    }
+}
+// crea una instancia (objeto)
+const personal = new personass("ana",30)
+personal.saludar()
+
+// que pasa en este ejemplo
+//class personass = define el modelo 
+//contructor() = se ejecuta automaticamente al crear un nuevo objeto
+//this.nombre = nombre = asigna los valores a la instancia
+//saludar() es un metodo que la clase puede ejecutar
+
+//con valores por defecto 
+
+class producto{
+    nombre: string
+    precio: number
+
+    constructor(nombre: string, precio: number = 0){
+        this.nombre = nombre
+        this.precio = precio
+    }
+
+    mostrar(){
+        console.log(`${this.nombre} cuesta $${this.precio}`)
+    }
+}
+const p = new producto("camiseta")
+p.mostrar
+
+
+// // ejercicio🔧 Ejercicio
+// Crea una clase llamada Libro con estas características:
+
+// 📚 Propiedades:
+// titulo (string)
+
+// autor (string)
+
+// anio (number)
+
+// 🛠 Constructor:
+// Inicializa esas tres propiedades.
+
+// 🗣 Método:
+// Un método descripcion() que devuelva un texto como:
+
+// arduino
+// Copiar
+// Editar
+// "El libro 'Clean Code' fue escrito por Robert C. Martin en el año 2008."
+
+class libro{
+    titulo: string
+    autor: string
+    anio: number
+
+    constructor (titulo: string, autor: string, anio:number){
+        this.titulo = titulo
+        this.autor = autor
+        this.anio = anio
+    }
+
+    descripcion(){
+        console.log(`El libro ${this.titulo} fue escrito por ${this.autor} en el anio ${this.anio}`)
+    }
+}
+const libro1 = new libro("Clean Code", "Robert C. Martin", 2008)
+console.log(libro1.descripcion)
+
+//Modificadores de acceso: public, private, protected.
+
+//controlan que propiedades se puede usar fuera o dentro de la clase 
+
+//public por defecto 
+//se puede acceder desde cualquier parte fuera o dentro de la clase
+
+class personasss{
+    public nombre: string
+
+    constructor(nombre:string){
+        this.nombre = nombre
+    }
+
+    saludar(){
+        console.log(`hola, soy${this.nombre}`)
+    }
+}
+
+const l = new personasss("santiago")
+console.log(l.nombre)
+
+//private
+//solo se puede acceder dentro de la clase donde fue declarado 
+
+class CuentaBancaria {
+    private saldo: number;
+  
+    constructor() {
+      this.saldo = 1000;
+    }
+  
+    verSaldo() {
+      return this.saldo;
+    }
+  }
+  
+  const cuenta = new CuentaBancaria();
+  console.log(cuenta.verSaldo()); // ✅ Funciona
+  // console.log(cuenta.saldo); // ❌ Error: 'saldo' es privado
+
+  //protected 
+  //se puede acceder dentro de las clases y desde las clases hijas
+  class Animal {
+    protected especie: string;
+  
+    constructor(especie: string) {
+      this.especie = especie;
+    }
+  }
+  
+  class perritos extends Animal { // para cambiar de Animal a perritos
+    ladrares() {
+      console.log(`El ${this.especie} ladra 🐶`);
+    }
+  }
+  
+  const perross = new perritos("canino");
+  perross.ladrares(); // ✅ El canino ladra
+  // console.log(perro.especie); // ❌ Error: 'especie' es protected
+  
+  //Interfaces para clases.
+//para forzar a las clases a cumplir una forma especifica
+//para mejorar la consistencia del codigo
+//para programar con mayor flexibilidad y escalabilidad
+
+//sintaxix basica 
+interface vehiculo{
+    marca: string
+    encender(): void
+}
+//Ahora, una clase que implemente esta interfaz debe tener esas propiedades y métodos:
+
+class Carro implements vehiculo {
+    marca:string
+
+    constructor(marca:string){
+        this.marca = marca
+    }
+    encender(): void {
+        console.log(`El ${this.marca} está encendido 🚗`)
+    }
+}
+
+//herencia y abstraccion
+//herencia
+//cuando una clase hereda propiedades y metodos de otra clase
+class Animalito {
+    nombre: string;
+  
+    constructor(nombre: string) {
+      this.nombre = nombre;
+    }
+  
+    emitirSonido(): void {
+      console.log(`${this.nombre} hace un sonido`);
+    }
+  }
+  
+  // 🐶 Perro hereda de Animal
+  class Perro extends Animalito {
+    ladrar(): void {
+      console.log(`${this.nombre} ladra 🐶`);
+    }
+  }
+  
+  const miPerro = new Perro("Max");
+  miPerro.emitirSonido(); // Max hace un sonido
+  miPerro.ladrar();        // Max ladra 🐶
+  //que gana la herencia 
+  //se reutiliza el codigo base no tienes que repetir nombre ni emitirSonido()
+
+  //abstraccion
+  //consiste en ocultar detalles internos y mostrar lo necesario
+  //en typescript usamos clases abstractas para definir una estructura que no se puede instaciar
+  abstract class Figura {
+    abstract calcularArea(): number; // método abstracto sin implementación
+  
+    describir(): void {
+      console.log("Soy una figura geométrica");
+    }
+  }
+  
+  class Cuadrado extends Figura {
+    lado: number;
+  
+    constructor(lado: number) {
+      super();
+      this.lado = lado;
+    }
+  
+    calcularArea(): number {
+      return this.lado * this.lado;
+    }
+  }
+  
+  const figura1 = new Cuadrado(5);
+  console.log(figura1.calcularArea()); // 25
+  figura1.describir(); // Soy una figura geométrica
+  
+  // ❌ const figuraBase = new Figura(); // Error: no se puede instanciar una clase abstracta
+
+  //Decoradores (más avanzado, pero útil si usas frameworks).
+
+//los decoradores es una funcion especial que puedes usar para modificar clases, propiedades, metodos o parametros en tiempo de compilacion
+//importante: para usar decoradores en typescript debes activar la opcion esperimentalDecotarptos en tsconfig.ts
+// {
+//     "experimentalDecorators": true
+//   }
+  
+// Tipo	Se aplica a...
+// @Class	Clases
+// @Property	Propiedades de clase
+// @Method	Métodos
+// @Parameter	Parámetros de métodos
+function Logger(constructor: Function) {
+    console.log("Clase registrada:", constructor.name);
+  }
+  
+  @Logger
+  class Usuario {
+    constructor() {
+      console.log("Usuario creado");
+    }
+  }
+  
+  // Al compilar, se imprime:
+  // Clase registrada: Usuario
+  // Usuario creado
+  
